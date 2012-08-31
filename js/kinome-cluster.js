@@ -13,20 +13,10 @@ pow = Math.pow;
 
 (function ($) {
 
-    $("#slope").slider({ min: 0, max: 10, step: 1, value: 5,
+    $("#radius").slider({ min: 0, max: 100, step: 1, value: 20,
         slide: function(event, ui) {
-            KVM.slope = ui.value;
-            KVM.slopeLabel.text(ui.value);
-            KVM.setRadii();
-            if (KVM.force) {
-                KVM.force.resume();
-            }
-        }
-    });
-    $("#yint").slider({ min: -100, max: 100, step: 1, value: 0,
-        slide: function(event, ui) {
-            KVM.yint = ui.value;
-            KVM.yintLabel.text(ui.value);
+            KVM.radius = ui.value;
+            KVM.radiusLabel.text(ui.value);
             KVM.setRadii();
             if (KVM.force) {
                 KVM.force.resume();
@@ -47,7 +37,7 @@ pow = Math.pow;
     // Color picker
     $("#inh").colorPicker().change(function() {
         KVM.inhColor = $(this).attr("value");
-        KVM.setColors();        
+        KVM.setColors();
     });
     $("#act").colorPicker().change(function() {
         KVM.actColor = $(this).attr("value");
@@ -76,27 +66,16 @@ pow = Math.pow;
         self.height = 975;
 
         // radius scaling values
-        self.slope = 5;
-        self.yint = 0;
+        self.radius = 20;
 
         // set labels for scaling factors
-        self.slopeLabel = $("label#slope").text(self.slope);
-        self.yintLabel = $("label#yint").text(self.yint);
+        self.radiusLabel = $("label#radius").text(self.radius);
 
         // opacity
         self.opac = 0.8;
 
         // set opacity label
         self.opacLabel = $("label#opac").text(self.opac);
-
-        // color values
-        self.inhR = 57;
-        self.inhG = 39;
-        self.inhB = 91;
-
-        self.actR = 199;
-        self.actG = 153;
-        self.actB = 0;
 
         // svg elements
         self.svg = d3.select("#kinome");
@@ -183,12 +162,6 @@ pow = Math.pow;
             return undefined;
         };
 
-        // Return radius based on intensity
-        self.getRadius = function (intensity) {
-            var radius = self.slope * intensity * (pow(-1, (intensity < 0))) + self.yint;
-            return radius >= 0 ? radius : 0;
-        };
-
         // obtain approriate color for intensity
         self.getColor = function (intensity) {
             if (intensity >= 0) {
@@ -201,13 +174,11 @@ pow = Math.pow;
         // use radius scaling events for data points
         self.setRadii = function() {
             d3.selectAll(".data#pts")
-                .attr("r", function(d) {
-                    return self.getRadius(d.Intensity);
-                });
+                .attr("r", self.radius);
             // make labels disappear when datapt radius is zero
             d3.selectAll(".data#label")
                 .attr("visibility", function(d) {
-                    return self.getRadius(d.Intensity) > 0 ? "visible"
+                    return self.radius > 0 ? "visible"
                         : "hidden";
                 });
         };
@@ -327,14 +298,14 @@ pow = Math.pow;
                 })
                 // make labels disappear when datapt radius is zero
                 .attr("visibility", function (d) {
-                    return self.getRadius(d.Intensity) > 0 ? "visible"
+                    return self.radius > 0 ? "visible"
                         : "hidden";
                 });
 
             self.forces.nodes.append("svg:circle")
                 .attr("r", function(d, i) {
                     return i < self.userData.length ?
-                        self.getRadius(d.Intensity) : 0;
+                        self.radius : 0;
                 })
                 // only set class/id to valid circles (even)
                 .attr("class", function(d, i) {
