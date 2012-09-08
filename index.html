@@ -48,75 +48,73 @@
     <div class="row">
 
         <!-- Sidebar -->
-        <div class="span3 bs-docs-sidebar" style="margin-left: 0">
-            <div class="well sidebar-nav">
-                <ul class="nav nav-list">
+        <div class="span3">
+            <ul class="nav nav-list">
 
-                    <!-- Upload Tab -->
-                    <li class="nav-header">Upload Data</li>
-                        <div id="upload">
-                            <input id="csv_file" type="file" accept="text/csv" multiple></input>
-                        </div><!-- end upload -->
+                <!-- Upload Tab -->
+                <li class="nav-header">Upload Data</li>
+                    <div id="upload">
+                        <input id="csv_file" type="file" accept="text/csv" multiple></input>
+                    </div><!-- end upload -->
 
-                    <!-- Scaling -->
-                    <li class="nav-header">Scaling</li>
-                        <div id="scaling">
-                            <table id="scale" class="ctrlTable">
-                                <tr>
-                                    <td>Radius</td>
-                                    <td width="200px"><div class="slider" id="radius"></div></td>
-                                    <td><label id="radius"></label></td>
-                                </tr>
-                            </table>
-                        </div><!-- end scaling -->
+                <!-- Scaling -->
+                <li class="nav-header">Scaling</li>
+                    <div id="scaling">
+                        <table id="scale" class="ctrlTable">
+                            <tr>
+                                <td>Radius</td>
+                                <td width="200px"><div class="slider" id="radius"></div></td>
+                                <td><label id="radius"></label></td>
+                            </tr>
+                        </table>
+                    </div><!-- end scaling -->
 
-                    <!-- Color Picker -->
-                    <li class="nav-header">Color</li>
-                        <div id="colors">
-                            <table id="colorPickerTable">
-                                <tr>
-                                    <td>
-                                        <label for="inh">Inhibitor</label>
-                                    </td>
-                                    <td>
-                                        <input id="inh" name="inh" type="text" value="#39275b">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label for="act">Activator</label>
-                                    </td>
-                                    <td>
-                                        <input id="act" name="act" type="text" value="#c79900">
-                                    </td>
-                                </tr>
-                            </table>
+                <!-- Color Picker -->
+                <li class="nav-header">Color</li>
+                    <div id="colors">
+                        <table id="colorPickerTable">
+                            <tr>
+                                <td>
+                                    <label for="inh">Inhibitor</label>
+                                </td>
+                                <td>
+                                    <input id="inh" name="inh" type="text" value="#39275b">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="act">Activator</label>
+                                </td>
+                                <td>
+                                    <input id="act" name="act" type="text" value="#c79900">
+                                </td>
+                            </tr>
+                        </table>
 
-                            <!-- opacity -->
-                            <table>
-                                <tr>
-                                    <td>
-                                        Opacity
-                                    </td>
-                                    <td width="100px">
-                                        <div id="opac"></div>
-                                    </td>
-                                    <td width="40px">
-                                        <label id="opac"></label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- end colors tab -->
+                        <!-- opacity -->
+                        <table>
+                            <tr>
+                                <td>
+                                    Opacity
+                                </td>
+                                <td width="100px">
+                                    <div id="opac"></div>
+                                </td>
+                                <td width="40px">
+                                    <label id="opac"></label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- end colors tab -->
 
-                    <!-- Demo -->
-                    <li class="nav-header">Demo</li>
-                        <div id="demo">
-                            <button id="demo">siRNA Data</button>
-                        </div>
+                <!-- Demo -->
+                <li class="nav-header">Demo</li>
+                    <div id="demo">
+                        <button id="demo">siRNA Data</button>
+                    </div>
 
-                </ul>
+            </ul>
 
-            </div><!-- end well/sidebar-nav -->
         </div><!-- end span -->
 
         <!-- Kinome -->
