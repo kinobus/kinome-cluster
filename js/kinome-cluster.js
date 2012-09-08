@@ -82,22 +82,10 @@ pow = Math.pow;
         self.dataGrp = d3.select(".data#grp");
 
 
-        // Color picker
-        self.hexFromRGB = function (r, g, b) {
-            var hex = [
-                r.toString( 16 ),
-                g.toString( 16 ),
-                b.toString( 16 )
-            ];
-            $.each( hex, function( nr, val ) {
-                if ( val.length === 1 ) {
-                    hex[ nr ] = "0" + val;
-                }
-            });
-            return hex.join( "" ).toUpperCase();
-        };
         self.inhColor = $("#inh").attr("value");
         self.actColor = $("#act").attr("value");
+
+        self.timecourses = 0;   // number of timecourses in experiment
 
         // Synchronously get kinase coordinates
         self.kinases = [];
@@ -110,7 +98,7 @@ pow = Math.pow;
                     var temp = data.pop();
                     temp.x /= 4;
                     temp.y /= 4;
-                    temp.Intensity = 0;
+                    temp.Intensity = [];
                     temp.fixed = true;
                     self.kinases.push(temp);
                 }
@@ -210,28 +198,36 @@ pow = Math.pow;
 
 
         // parse, plot user uploaded data
-        // uses closure of self.userData
-        // self.userData should be sufficiently parsed
-        // to an array of 2-element arrays:
+        // inputData should be sufficiently parsed
+        // to an array of n-element arrays:
         // [ [ GeneID, intensity-value ], ... ]
+        // where n is number of timecourses per sample
         self.applyData = function (inputData) {
-            // sort inputData so smaller radii are visible
-            inputData.sort(function(left, right) {
-                var l = abs(left[1]);
-                var r = abs(right[1]);
-                return l == r ? 0 : (l < r ? -1 : 1);
-            });
+            // obtain number of timecourses from first row
+            self.timecourses = inputData[0].length - 1;
+            // parse input data
             while (inputData.length > 0) {
                 var temp = inputData.pop();
                 for (i = 0; i < self.kinases.length; i++) {
-                    if (self.kinases[i].GeneID == temp[0]) {
-                        self.kinases[i].Intensity = temp[1];
+                    // search for GeneID match
+                    if (self.kinases[i].GeneID == temp.splice(0, 1)[0]) {
+                        self.kinases[i].Intensity = temp;
                         self.userData.push(self.kinases[i]);
                     }
                 }
             }
             self.setForce();    // run force layout
         };
+
+        /* Use Clusterfck to separate intensities into clusters
+         */
+        self.setClusters = function() {
+            var intensities = [];
+            // array of intensities
+            for (i = 0; i < self.kinases.length; i++) {
+                intensities.push(self.kinases[i].Intensity);
+            }
+        }
 
         /**
          * LABELS USING FORCES
