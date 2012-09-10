@@ -26,13 +26,19 @@ pow = Math.pow;
             }
         }
     });
-    $("#K").slider({ min: 2, max: 100, step: 1, value: 2,
-        slide: function(event, ui) {
-            KVM.K = ui.value;
-            KVM.kLabel.text(ui.value);
-            KVM.setRadii();
-        }
-    });
+    // $("#K").slider({ min: 2, max: 100, step: 1, value: 2,
+    //     slide: function(event, ui) {
+    //         KVM.K = ui.value;
+    //         KVM.kLabel.text(ui.value);
+    //         KVM.setRadii();
+    //     }
+    // });
+    $("#K").attr("value", 2).attr("min", 2).attr("max", 100)
+        .css("width", "100%")
+        .on("change", function() {
+            KVM.K = $(this).attr("value");
+            $("label#K").text(KVM.K);
+        });
     $("#opac").slider({ min: 0.1, max: 1, step: .1, value: .8,
         slide: function(event, ui) {
             KVM.opac = ui.value;
