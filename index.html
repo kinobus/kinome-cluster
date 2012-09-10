@@ -13,20 +13,22 @@
     <link rel="icon" type="image/ico" href="kinome-overlay.ico" />
 
     <!-- Necessary JS Libraries -->
-    <script src="js/jquery-1.7.2.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
     <script src="js/jquery-ui-1.8.22.custom.min.js"></script>
     <script src="js/d3.v2.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="laktek/jquery.colorPicker.js"></script>
+    <script src="js/clusterfck.js"></script>
+    <script src="js/jquery.sparkline.js"></script>
 
-    </head>
+</head>
 
 <body>
 
 <!-- Navbar (tbs) -->
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
-        <div class="container">
+        <div class="container" style="width: 1065px">
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -37,6 +39,7 @@
                 <ul class="nav">
                     <li><a href="http://code.google.com/p/kinome-overlay">About</a></li>
                     <li><a href="mailto:josephl@cs.pdx.edu,nrobin24@uw.edu">Contact</a></li>
+                    <li><a href="#" id="demo">Demo</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -72,24 +75,6 @@
                 <!-- Color Picker -->
                 <li class="nav-header">Color</li>
                     <div id="colors">
-                        <table id="colorPickerTable">
-                            <tr>
-                                <td>
-                                    <label for="inh">Inhibitor</label>
-                                </td>
-                                <td>
-                                    <input id="inh" name="inh" type="text" value="#39275b">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="act">Activator</label>
-                                </td>
-                                <td>
-                                    <input id="act" name="act" type="text" value="#c79900">
-                                </td>
-                            </tr>
-                        </table>
 
                         <!-- opacity -->
                         <table>
@@ -107,11 +92,33 @@
                         </table>
                     </div><!-- end colors tab -->
 
-                <!-- Demo -->
+
+                <!-- Clustering -->
+                <li class="nav-header">Clustering</li>
+                    <div id="clustering">
+                        <table id="cluster" class="ctrlTable">
+                            <tr>
+                                <td><nobr>Clusters</nobr></td>
+                                <td width="200px"><div class="slider" id="K"></div></td>
+                                <td><label id="K"></label></td>
+                            </tr>
+                        </table>
+                        <table id="clusterTable" class="table">
+                            <thead>
+                                <th>#</th>
+                                <th>Color</th>
+                                <th>Mean</th>
+                            </thead>
+                            <tbody id="clusterTableBody">
+                            </tbody>
+                        </table>
+                    </div><!-- end clustering -->
+                <!-- Demo 
                 <li class="nav-header">Demo</li>
                     <div id="demo">
                         <button id="demo">siRNA Data</button>
                     </div>
+                    -->
 
             </ul>
 

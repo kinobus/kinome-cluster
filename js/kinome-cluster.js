@@ -13,6 +13,9 @@ pow = Math.pow;
 
 (function ($) {
 
+    // initialize cluster table to be invisible until data loaded
+    $("#clusterTable").css("visibility", "hidden");
+
     $("#radius").slider({ min: 0, max: 100, step: 1, value: 20,
         slide: function(event, ui) {
             KVM.radius = ui.value;
@@ -21,6 +24,13 @@ pow = Math.pow;
             if (KVM.force) {
                 KVM.force.resume();
             }
+        }
+    });
+    $("#K").slider({ min: 2, max: 100, step: 1, value: 2,
+        slide: function(event, ui) {
+            KVM.K = ui.value;
+            KVM.kLabel.text(ui.value);
+            KVM.setRadii();
         }
     });
     $("#opac").slider({ min: 0.1, max: 1, step: .1, value: .8,
@@ -46,10 +56,8 @@ pow = Math.pow;
     
 
     // Demo button
-    // SigmaLBarMean Demo
-    $("#demo").button();
-    $("#demo").click(function() {
-        $.getJSON("data/SigmaLBarMean.json", function(demoData) {
+    $("a#demo").click(function() {
+        $.getJSON("data/clusterDemo1.json", function(demoData) {
             KVM.clearData();
             KVM.applyData(demoData);
         });
@@ -70,6 +78,10 @@ pow = Math.pow;
 
         // set labels for scaling factors
         self.radiusLabel = $("label#radius").text(self.radius);
+
+        // clustering k-value
+        self.K = 2;
+        self.kLabel = $("label#K").text(self.K);
 
         // opacity
         self.opac = 0.8;
@@ -210,7 +222,8 @@ pow = Math.pow;
                 var temp = inputData.pop();
                 for (i = 0; i < self.kinases.length; i++) {
                     // search for GeneID match
-                    if (self.kinases[i].GeneID == temp.splice(0, 1)[0]) {
+                    if (self.kinases[i].GeneID == temp[0]) {
+                        temp.splice(0, 1);
                         self.kinases[i].Intensity = temp;
                         self.userData.push(self.kinases[i]);
                     }
@@ -224,9 +237,12 @@ pow = Math.pow;
         self.setClusters = function() {
             var intensities = [];
             // array of intensities
-            for (i = 0; i < self.kinases.length; i++) {
-                intensities.push(self.kinases[i].Intensity);
+            for (i = 0; i < self.userData.length; i++) {
+                intensities.push(self.userData[i].Intensity);
             }
+            // first, let K have max of number of data - 1
+            $("#K").slider({ max: 20 });
+            console.log(clusterfck.kmeans(intensities, self.K));
         }
 
         /**

@@ -2,6 +2,15 @@ body {
     padding-top: 60px;
 }
 
+/* override container */
+div.container {
+    width: 1065px;
+}
+
+div.span9 {
+    width: 825px;
+}
+
 .pos {
     width: 825px;
     position: relative;
