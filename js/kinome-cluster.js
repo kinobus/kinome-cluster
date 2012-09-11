@@ -1,4 +1,4 @@
-/* KinomeOverlay.js
+/* kinome-cluster.js
  * Copyright 2012 (c) Joseph Lee & Nick Robin
  * This software may be distributed under the MIT License
  * See file LICENSE for details
@@ -26,13 +26,7 @@ pow = Math.pow;
             }
         }
     });
-    // $("#K").slider({ min: 2, max: 100, step: 1, value: 2,
-    //     slide: function(event, ui) {
-    //         KVM.K = ui.value;
-    //         KVM.kLabel.text(ui.value);
-    //         KVM.setRadii();
-    //     }
-    // });
+    // cluster number, K slider
     $("#K").attr("value", 2).attr("min", 2).attr("max", 100)
         .css("width", "100%")
         .on("change", function() {
@@ -77,20 +71,24 @@ pow = Math.pow;
         self.K = 2;
         self.kLabel = $("label#K").text(self.K);
 
+        // mean of each centroid
+        self.clusterMeans = [];
+
         // opacity
         self.opac = 0.8;
 
         // set opacity label
         self.opacLabel = $("label#opac").text(self.opac);
 
-        // svg elements
-        self.svg = d3.select("#kinome");
-        self.dataGrp = d3.select(".data#grp");
-
         // array of color hexes of each cluster
         self.colors = [];
 
         self.timecourses = 0;   // number of timecourses in experiment
+
+        // svg elements
+        self.svg = d3.select("#kinome");
+        self.dataGrp = d3.select(".data#grp");
+
 
         // Synchronously get kinase coordinates
         self.kinases = [];
@@ -159,11 +157,10 @@ pow = Math.pow;
         self.getColor = function (clusterNum) {
             var colorSet = self.colors[clusterNum - 1];
             if (colorSet != undefined) {
-                console.log(colorSet.val());
                 return colorSet.val();
             }
             else {
-                return "#000000";
+                return "#a0a0a0";
             }
         };
 
@@ -229,6 +226,8 @@ pow = Math.pow;
         /* Use Clusterfck to separate intensities into clusters
          */
         self.setClusters = function() {
+            self.clusters = [];
+            self.colors = [];
             var intensities = [];
             // array of intensities
             for (i = 0; i < self.userData.length; i++) {
@@ -265,19 +264,58 @@ pow = Math.pow;
             $("#clusterTableBody").html("");
             // add row
             for (i = 1; i <= self.K; i++) {
-                var row = '<tr><td>' + i + '</td><td><input id="color' + i + '"></input></td><td><div id="sparkline' + i + '"></div></td></tr>';
+                var row = '<tr><td>' + i + '</td><td><input id="color' + i + '" type="text" style="display: none"></td><td><div id="sparkline' + i + '"></div></td></tr>';
                 $("#clusterTableBody").append(row);
                 // set jquery colorpicker
                 $("#color" + i).colorPicker({
-                    pickerDefault: "000000",
+                    pickerDefault: "a0a0a0",
                     onColorChange: function() {
-                        $(this).change();
+                        //$(this).change();
                         self.setColors();
                     }
                 });
                 self.colors.push($("#color" + i));
             }
+
+            // add sparklines
+            self.getClusterMeans();
+            for (i = 1; i <= self.K; i++) {
+                $("#sparkline" + i).sparkline(self.clusterMeans[i - 1], {
+                    type: 'line',
+                    width: '80px',
+                    fillColor: '#ffffff'
+                });
+            }
         }
+
+        self.getClusterMeans = function() {
+            self.clusterMeans = [];     // clear
+            for (i = 0; i < self.K; i++) {
+                var cluster = self.clusters[i];
+                var sum = [];   // running count of sum within cluster
+                for (j = 0; j < cluster[0].length; j++) {
+                    sum.push(cluster[0][j]);
+                }
+                for (j = 1; j < cluster.length; j++) {
+                    for (k = 0; k < cluster[j].length; k++) {
+                        sum[k] += cluster[j][k];
+                    }
+                }
+                // divide sum by n to find mean
+                var mean = [];
+                for (j = 0; j < sum.length; j++) {
+                    mean.push(sum[j] / cluster.length);
+                }
+                self.clusterMeans.push(mean);
+            }
+        }
+
+        // on cluster slider change event
+        $("#K").on("change", function() {
+            self.setClusters();
+            self.setColors();
+        });
+
 
         /**
          * LABELS USING FORCES
