@@ -50,17 +50,6 @@ pow = Math.pow;
         }
     });
 
-    // Color picker
-    $("#inh").colorPicker().change(function() {
-        KVM.inhColor = $(this).attr("value");
-        KVM.setColors();
-    });
-    $("#act").colorPicker().change(function() {
-        KVM.actColor = $(this).attr("value");
-        KVM.setColors();        
-    });
-    
-
     // Demo button
     $("a#demo").click(function() {
         $.getJSON("data/clusterDemo1.json", function(demoData) {
@@ -68,7 +57,6 @@ pow = Math.pow;
             KVM.applyData(demoData);
         });
     });
- 
 
     /**
      * Kinome
@@ -99,9 +87,8 @@ pow = Math.pow;
         self.svg = d3.select("#kinome");
         self.dataGrp = d3.select(".data#grp");
 
-
-        self.inhColor = $("#inh").attr("value");
-        self.actColor = $("#act").attr("value");
+        // array of color hexes of each cluster
+        self.colors = [];
 
         self.timecourses = 0;   // number of timecourses in experiment
 
@@ -169,11 +156,15 @@ pow = Math.pow;
         };
 
         // obtain approriate color for intensity
-        self.getColor = function (intensity) {
-            if (intensity >= 0) {
-                return self.actColor;
+        self.getColor = function (clusterNum) {
+            var colorSet = self.colors[clusterNum - 1];
+            if (colorSet != undefined) {
+                console.log(colorSet.val());
+                return colorSet.val();
             }
-            return self.inhColor;
+            else {
+                return "#000000";
+            }
         };
 
         // change all radii accordingly
@@ -196,12 +187,8 @@ pow = Math.pow;
             // set all data node colors
             d3.selectAll(".data#pts")
                 .style("fill", function(d) {
-                    return self.getColor(d.Intensity);
+                    return self.getColor(d.Cluster);
                 });
-
-            // set color samples
-            $("#inh").css("background-color", self.inhColor);
-            $("#act").css("background-color", self.actColor);
 
         };
 
@@ -235,6 +222,7 @@ pow = Math.pow;
                     }
                 }
             }
+            self.setClusters();
             self.setForce();    // run force layout
         };
 
@@ -247,8 +235,48 @@ pow = Math.pow;
                 intensities.push(self.userData[i].Intensity);
             }
             // first, let K have max of number of data - 1
-            $("#K").slider({ max: 20 });
-            console.log(clusterfck.kmeans(intensities, self.K));
+            $("#K").attr("max", 20);
+            self.clusters = clusterfck.kmeans(intensities, self.K);
+
+            // assign clusters
+            // find intensity array matching those in each cluster
+            for (i = 0; i < self.userData.length; i++) {
+                var temp = self.userData[i];
+                var tempInt = temp.Intensity;
+                // j is cluster number
+                for (j = 0; j < self.K; j++) {
+                    // which elem in cluster array
+                    for (k = 0; k < self.clusters[j].length; k++) {
+                        var match = true;
+                        for (m = 0; m < self.timecourses && match == true; m++) {
+                            if (tempInt[m] != self.clusters[j][k][m]) {
+                                match = false;
+                            }
+                        }
+                        if (match == true) {
+                             temp.Cluster = j + 1;
+                        }
+                    }
+                }
+            }
+            // show cluster table
+            $("#clusterTable").css("visibility", "visible");
+            // clear table body before adding rows
+            $("#clusterTableBody").html("");
+            // add row
+            for (i = 1; i <= self.K; i++) {
+                var row = '<tr><td>' + i + '</td><td><input id="color' + i + '"></input></td><td><div id="sparkline' + i + '"></div></td></tr>';
+                $("#clusterTableBody").append(row);
+                // set jquery colorpicker
+                $("#color" + i).colorPicker({
+                    pickerDefault: "000000",
+                    onColorChange: function() {
+                        $(this).change();
+                        self.setColors();
+                    }
+                });
+                self.colors.push($("#color" + i));
+            }
         }
 
         /**
@@ -332,10 +360,14 @@ pow = Math.pow;
                 .attr("id", function(d, i) {
                     return i < self.userData.length ? "pts" : "dummy";
                 })
+                // set fill color of cluster
                 .style("fill", function(d) {
-                    return self.getColor(d.Intensity);
+                    return self.getColor(d.Cluster);
                 })
-                .style("fill-opacity", self.opac);
+                .style("fill-opacity", self.opac)
+                .attr("cluster", function(d) {
+                    return d.Cluster;
+                });
 
             self.forces.nodes.append("svg:text")
                 .text(function(d, i) {
