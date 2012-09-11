@@ -16,16 +16,13 @@ pow = Math.pow;
     // initialize cluster table to be invisible until data loaded
     $("#clusterTable").css("visibility", "hidden");
 
-    $("#radius").slider({ min: 0, max: 100, step: 1, value: 20,
-        slide: function(event, ui) {
-            KVM.radius = ui.value;
-            KVM.radiusLabel.text(ui.value);
+    // radius slider
+    $("input#radius").css("width", "100%")
+        .on("change", function() {
+            KVM.radius = $(this).attr("value");
+            $("label#radius").text(KVM.radius);
             KVM.setRadii();
-            if (KVM.force) {
-                KVM.force.resume();
-            }
-        }
-    });
+        });
     // cluster number, K slider
     $("#K").attr("value", 2).attr("min", 2).attr("max", 100)
         .css("width", "100%")
@@ -33,17 +30,15 @@ pow = Math.pow;
             KVM.K = $(this).attr("value");
             $("label#K").text(KVM.K);
         });
-    $("#opac").slider({ min: 0.1, max: 1, step: .1, value: .8,
-        slide: function(event, ui) {
-            KVM.opac = ui.value;
-            KVM.opacLabel.text(ui.value);
-            d3.selectAll(".data#pts")
-                .style("fill-opacity", function(d) {
-                    return ui.value;
-                });
-        }
-    });
-
+    // opacity range slider
+    $("input#opac").css("width", "100%")
+        .on("change", function() {
+            KVM.opac = $(this).attr("value");
+            $("label#opac").text(KVM.opac);
+            d3.selectAll(".data#pts").style("fill-opacity", function() {
+                return KVM.opac;
+            });
+        });
     // Demo button
     $("a#demo").click(function() {
         $.getJSON("data/clusterDemo1.json", function(demoData) {
@@ -62,7 +57,7 @@ pow = Math.pow;
         self.height = 975;
 
         // radius scaling values
-        self.radius = 20;
+        self.radius = 40;
 
         // set labels for scaling factors
         self.radiusLabel = $("label#radius").text(self.radius);
@@ -198,6 +193,34 @@ pow = Math.pow;
             self.userData = [];
         };
 
+        // assign random colors to the first 20 clusters
+        self.defaultColor = function(i) {
+            switch(i) {
+                case 1: return "0000ff";
+                case 2: return "00ff00";
+                case 3: return "ff0000";
+                case 4: return "ffff00";
+                case 5: return "00ffff";
+                case 6: return "05ff50";
+                case 7: return "ff00ff";
+                case 8: return "ff99cc";
+                case 9: return "ffcc99";
+                case 10: return "99ccff";
+                case 11: return "808080";
+                case 12: return "00ccff";
+                case 13: return "339966";
+                case 14: return "33cccc";
+                case 15: return "333333";
+                case 16: return "aaaaaa";
+                case 17: return "ff8888";
+                case 18: return "88ff88";
+                case 19: return "8888ff";
+                case 20: return "8f29c3";
+                default: return "0a0a0a";
+                         break;
+            }
+        }
+
 
         // parse, plot user uploaded data
         // inputData should be sufficiently parsed
@@ -268,9 +291,8 @@ pow = Math.pow;
                 $("#clusterTableBody").append(row);
                 // set jquery colorpicker
                 $("#color" + i).colorPicker({
-                    pickerDefault: "a0a0a0",
+                    pickerDefault: self.defaultColor(i),
                     onColorChange: function() {
-                        //$(this).change();
                         self.setColors();
                     }
                 });

@@ -62,45 +62,42 @@
 
                 <!-- Scaling -->
                 <li class="nav-header">Scaling</li>
-                    <div id="scaling">
-                        <table id="scale" class="ctrlTable">
-                            <tr>
-                                <td>Radius</td>
-                                <td width="200px"><div class="slider" id="radius"></div></td>
-                                <td><label id="radius"></label></td>
-                            </tr>
-                        </table>
-                    </div><!-- end scaling -->
+                    <table class="slideRow">
+                        <tr>
+                            <td class="nameCell">Radius</td>
+                            <td class="slideCell">
+                                <input type="range" id="radius" min="0" max="80" value="40" step="5">
+                            </td>
+                            <td class="labelCell"><label id="radius"></label></td>
+                        </tr>
+                    </table>
 
                 <!-- Color Picker -->
-                <li class="nav-header">Color</li>
-                    <div id="colors">
-
-                        <!-- opacity -->
-                        <table>
-                            <tr>
-                                <td>
-                                    Opacity
-                                </td>
-                                <td width="100px">
-                                    <div id="opac"></div>
-                                </td>
-                                <td width="40px">
-                                    <label id="opac"></label>
-                                </td>
-                            </tr>
-                        </table>
-                    </div><!-- end colors tab -->
+                <li class="nav-header">Display</li>
+                    <!-- opacity -->
+                    <table class="slideRow">
+                        <tr>
+                            <td class="nameCell">
+                                Opacity
+                            </td>
+                            <td class="slideCell">
+                                <input type="range" id="opac" min="0" max="1" step="0.1" value="0.8">
+                            </td>
+                            <td class="labelCell">
+                                <label id="opac"></label>
+                            </td>
+                        </tr>
+                    </table>
 
 
                 <!-- Clustering -->
                 <li class="nav-header">Clustering</li>
                     <div id="clustering">
-                        <table id="cluster" class="ctrlTable">
+                        <table class="slideRow">
                             <tr>
-                                <td><nobr>Clusters</nobr></td>
-                                <td width="200px"><input type="range" id="K"></div></td>
-                                <td><label id="K"></label></td>
+                                <td class="nameCell">Clusters</td>
+                                <td class="slideCell"><input type="range" id="K"></td>
+                                <td class="labelCell"><label id="K"></label></td>
                             </tr>
                         </table>
                         <table id="clusterTable" class="table table-condensed">

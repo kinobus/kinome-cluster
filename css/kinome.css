@@ -11,6 +11,40 @@ div.span9 {
     width: 825px;
 }
 
+table#clusterTable thead tr th {
+    text-align: center;
+}
+
+table.slideRow {
+    width: 220px;
+    table-layout: fixed;
+}
+
+td.nameCell {
+    width: 60px;
+    overflow: hidden;
+}
+
+.slideRow td.labelCell {
+    width: 25px;
+    text-align: right;
+}
+
+.slideRow td.slideCell {
+    width: 135px;
+}
+
+#clusterTable tbody tr td {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.colorPicker-picker {
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .pos {
     width: 825px;
     position: relative;
@@ -40,8 +74,8 @@ div.span9 {
 
 .data#pts {
     stroke: white;
-    stroke-width: 1;
-    stroke-opacity: .5;
+    stroke-width: 1px;
+    stroke-opacity: 0.5;
 }
 
 .data#label {
