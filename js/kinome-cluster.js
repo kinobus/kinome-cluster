@@ -231,7 +231,7 @@ pow = Math.pow;
                 case 3: return "ff0000";
                 case 4: return "ffff00";
                 case 5: return "00ffff";
-                case 6: return "05ff50";
+                case 6: return "85a350";
                 case 7: return "ff00ff";
                 case 8: return "ff99cc";
                 case 9: return "ffcc99";
