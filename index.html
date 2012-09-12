@@ -57,7 +57,7 @@
                 <!-- Upload Tab -->
                 <li class="nav-header">Upload Data</li>
                     <div id="upload">
-                        <input id="csv_file" type="file" accept="text/csv" multiple></input>
+                        <input id="csv_file" type="file" accept="text/csv" name="files[]" multiple></input>
                     </div><!-- end upload -->
 
                 <!-- Scaling -->
@@ -96,7 +96,7 @@
                         <table class="slideRow">
                             <tr>
                                 <td class="nameCell">Clusters</td>
-                                <td class="slideCell"><input type="range" id="K"></td>
+                                <td class="slideCell"><input type="range" id="K" min="2" max="20" step="1" value="2"></td>
                                 <td class="labelCell"><label id="K"></label></td>
                             </tr>
                         </table>

@@ -24,11 +24,12 @@ pow = Math.pow;
             KVM.setRadii();
         });
     // cluster number, K slider
-    $("#K").attr("value", 2).attr("min", 2).attr("max", 100)
-        .css("width", "100%")
+    $("input#K").css("width", "100%")
         .on("change", function() {
             KVM.K = $(this).attr("value");
             $("label#K").text(KVM.K);
+            KVM.setClusters();
+            KVM.setColors();
         });
     // opacity range slider
     $("input#opac").css("width", "100%")
@@ -121,22 +122,51 @@ pow = Math.pow;
         // Event binding on View: input file-upload
         self.onFileUpload = $("#csv_file").change(function() {
             var upload_file = document.getElementById("csv_file").files;
-            for (i = 0; i < upload_file.length; i++) {
-                self.reader.readAsText(upload_file[i]);
-            }
+            self.reader.readAsText(upload_file[0]);
+            // for (i = 0; i < upload_file.length; i++) {
+            //     self.reader.readAsText(upload_file[i]);
+            // }
         });
 
         // Event triggered by finished file upload
         // called upon completion of reader.readAsText
         self.reader.onloadend = function(e) {
 
-            // parse input data
-            var data = self.reader.result.split("\n");
-            for (i = 0; i < data.length; i++) {
-                data[i] = data[i].split(",");
+            // parse input rawData
+            var rawData = String(self.reader.result);
+            while (rawData.indexOf('\r') >= 0) {
+                rawData = rawData.replace('\r', "");
             }
-            self.applyData(data);
+            //rawData = rawData.split("\n");
+            var rows = rawData.split('\n');
+            if (rows[rows.length - 1].length == 0) {
+                rows.pop();     // remove empty last row
+            }
+            var table = [];
+            var temp = '';
+            for (z = 0; z < rows.length; z++) {
+                temp = rows[z].split(',');
+                for (y = 1; y < temp.length; y++) {
+                    temp[y] = parseFloat(temp[y]);
+                }
+                table.push(temp);
+            }
+            self.applyData(table);
         };
+
+        self.parseRawData = function(csvText) {
+            csvText = csvText.replace(String.fromCharCode(13), "");
+            var rows = csvText.split('\n');
+            var data = [];
+            if (rows[rows.length - 1].length == 0) {
+                rows.pop();     // remove empty last row
+            }
+            for (i = 0; i < rows.length; i++) {
+                data.push(rows[i].split(','));
+            }
+            return data;
+        }
+
 
         // Return Kinase object by GeneID
         self.getKinaseById = function (geneid) {
@@ -233,15 +263,22 @@ pow = Math.pow;
             // parse input data
             while (inputData.length > 0) {
                 var temp = inputData.pop();
+                var match = false;
                 for (i = 0; i < self.kinases.length; i++) {
                     // search for GeneID match
                     if (self.kinases[i].GeneID == temp[0]) {
+                        match = true;
                         temp.splice(0, 1);
                         self.kinases[i].Intensity = temp;
                         self.userData.push(self.kinases[i]);
                     }
                 }
+                if (match == false) {
+                    console.log('Gene ID: "' + temp[0] + '" not found.');
+                }
             }
+            // $("input#K").attr("max", self.userData.length);
+            // Cluster slider max now set to max number of data rows
             self.setClusters();
             self.setForce();    // run force layout
         };
@@ -331,13 +368,6 @@ pow = Math.pow;
                 self.clusterMeans.push(mean);
             }
         }
-
-        // on cluster slider change event
-        $("#K").on("change", function() {
-            self.setClusters();
-            self.setColors();
-        });
-
 
         /**
          * LABELS USING FORCES
