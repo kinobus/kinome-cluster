@@ -251,6 +251,14 @@ pow = Math.pow;
             }
         }
 
+        // exporter
+        $('#export').click(function() {
+            var serializer = new XMLSerializer();
+            var kinome = document.getElementById('kinome');
+            var svgText = serializer.serializeToString(kinome);
+            console.log(svgText);
+        });
+
 
         // parse, plot user uploaded data
         // inputData should be sufficiently parsed

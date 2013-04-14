@@ -63,6 +63,8 @@ td.nameCell {
 #kinome {
     width: 825px;
     height: 975px;
+    background-image: url(../img/kinome.svg);
+    background-size: cover;
 }
 
 .kinase {
