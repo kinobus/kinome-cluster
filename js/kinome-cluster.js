@@ -6,12 +6,13 @@
  * http://code.google.com/p/kinome-overlay
  */
 
-// Heavily used shortcut
-pF = parseFloat;
-abs = Math.abs;
-pow = Math.pow;
 
 (function ($) {
+
+    var render= {
+        url: 'http://192.168.1.6:5050/render'
+    };
+        
 
     // initialize cluster table to be invisible until data loaded
     $("#clusterTable").css("visibility", "hidden");
@@ -256,7 +257,19 @@ pow = Math.pow;
             var serializer = new XMLSerializer();
             var kinome = document.getElementById('kinome');
             var svgText = serializer.serializeToString(kinome);
-            console.log(svgText);
+            // send plotted svg data to KinoRender server
+            var data = {
+                svg: svgText,
+                app: 'kinome-cluster'
+            };
+            $.ajax({
+                url: render.url,
+                data: data,
+                success: function(img) {
+                    $('body').append(img);
+                },
+                jsonp: 'jsonp'
+            });
         });
 
 
