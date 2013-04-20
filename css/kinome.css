@@ -63,10 +63,10 @@ td.nameCell {
 #kinome {
     width: 825px;
     height: 975px;
-    background-image: url(../img/kinome.svg);
     background-size: cover;
 }
 
+/*
 .kinase {
     stroke: black;
     stroke-width: .4;
@@ -84,6 +84,7 @@ td.nameCell {
     font-family: sans-serif;
     fill: black;
 }
+*/
 
 #colorPickerTable td {
     padding-right: 8px;

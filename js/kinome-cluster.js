@@ -112,8 +112,12 @@
             .append("svg:circle")
             .attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; })
-            .attr("r", function(d) { return 4; })
+            .attr("r", 4)
             .attr("class", "kinase")
+            .attr("stroke", "black")
+            .attr("stroke-width", 0.4)
+            .attr("fill", "white")
+            .attr("fill-opacity", 0.5)
             .attr("id", function(d) { return d.GeneID; });
 
         /* Upload file handle */
@@ -197,9 +201,13 @@
                 .attr("r", self.radius);
             // make labels disappear when datapt radius is zero
             d3.selectAll(".data#label")
-                .attr("visibility", function(d) {
-                    return self.radius > 0 ? "visible"
-                        : "hidden";
+                //.attr("visibility", function(d) {
+                //    return self.radius > 0 ? "visible"
+                //        : "hidden";
+                //});
+                .attr("display", function(d) {
+                    return self.radius > 0 ? "inline"
+                        : "none";
                 });
         };
 
@@ -454,9 +462,9 @@
                         : "label";
                 })
                 // make labels disappear when datapt radius is zero
-                .attr("visibility", function (d) {
-                    return self.radius > 0 ? "visible"
-                        : "hidden";
+                .attr("display", function (d) {
+                    return self.radius > 0 ? "inline"
+                        : "none";
                 });
 
             self.forces.nodes.append("svg:circle")
@@ -476,6 +484,8 @@
                     return self.getColor(d.Cluster);
                 })
                 .style("fill-opacity", self.opac)
+                .style("stroke-width", 1)
+                .style("stroke", "white")
                 .attr("cluster", function(d) {
                     return d.Cluster;
                 });
@@ -484,6 +494,9 @@
                 .text(function(d, i) {
                     return i < self.userData.length ? "" : d.KinaseName;
                 })
+                .style("fill", "black")
+                .style("font-family", "sans-serif")
+                .style("font-size", "10pt")
                 // only set class/id to valid text labels (odd)
                 .attr("class", function(d, i) {
                     return i < self.userData.length ? "dummy" : "data";
