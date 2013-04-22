@@ -275,8 +275,7 @@
                 data: data,
                 jsonp: 'jsonp',
                 success: function(img) {
-                    console.log(img);
-                    $('body').append(img);
+                    $('body').html('<img src="data:image/png;base64,' + img + '" />');
                 }
             });
         });
