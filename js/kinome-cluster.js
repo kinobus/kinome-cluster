@@ -10,7 +10,7 @@
 (function ($) {
 
     var render= {
-        url: 'http://192.168.1.6:5050/render'
+        url: 'http://192.168.1.112:5050/render'
     };
         
 
@@ -273,10 +273,11 @@
             $.ajax({
                 url: render.url,
                 data: data,
+                jsonp: 'jsonp',
                 success: function(img) {
+                    console.log(img);
                     $('body').append(img);
-                },
-                jsonp: 'jsonp'
+                }
             });
         });
 
