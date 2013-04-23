@@ -10,7 +10,7 @@
 (function ($) {
 
     var render= {
-        url: 'http://192.168.1.112:5050/render'
+        url: 'http://ruby.cat.pdx.edu:5050/render'
     };
         
 
@@ -262,6 +262,7 @@
 
         // exporter
         $('#export').click(function() {
+            $(this).attr('disabled', true);
             var serializer = new XMLSerializer();
             var kinome = document.getElementById('kinome');
             var svgText = serializer.serializeToString(kinome);
@@ -274,8 +275,9 @@
                 url: render.url,
                 data: data,
                 jsonp: 'jsonp',
-                success: function(img) {
-                    $('body').html('<img src="data:image/png;base64,' + img + '" />');
+                success: function(data) {
+                    var img = '<img src="data:image/png;base64,' + data.png + '" />';
+                    $('body').html(img);
                 }
             });
         });
