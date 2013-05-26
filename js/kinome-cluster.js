@@ -542,4 +542,24 @@
 
     KVM = new KinomeViewModel();
 
+    /* SVG download event
+     * using FileSaver.js */
+    $('#download').click(function() {
+        $.ajax({
+            url: 'img/kinome.svg',
+            dataType: 'text',
+            success: function(kinomeBG) {
+                var bg_grp = 
+                    /<[gG][^>]*>(.|[\r\n])*<\/[gG]>/.exec(kinomeBG)[0];
+                var overlay = $('#kinomeDiv').html();
+                var dl_svg = overlay.replace('<g id="replace"></g>',
+                                             bg_grp);
+                var svgBlob = new Blob([dl_svg], {
+                    type: 'image/svg+xml;'
+                });
+                saveAs(svgBlob, 'kinome.svg');
+            }
+        });
+    });
+
 }) (jQuery);

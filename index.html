@@ -18,6 +18,7 @@
     <script src="laktek/jquery.colorPicker.js"></script>
     <script src="js/clusterfck.js"></script>
     <script src="js/jquery.sparkline.js"></script>
+    <script src="js/FileSaver.js"></script>
 
 </head>
 
@@ -114,10 +115,10 @@
                         <button id="demo">siRNA Data</button>
                     </div>
                     -->
-                <!-- Export -->
-                <li class="nav-header">Export</li>
+                <!-- Download -->
+                <li class="nav-header">Download</li>
                     <div class="exportDiv">
-                        <button id="export">Export to PNG</button>
+                        <button id="download">Download SVG</button><br>
                     </div>
             </ul>
 
@@ -134,6 +135,8 @@
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
                     version="1.1" width="825" height="975">
+                    <!-- replacement placeholder for svg download -->
+                    <g id="replace"></g>
                     <g id="kinase_grp"></g>
                     <g class="data" id="grp"></g>
                 </svg>
