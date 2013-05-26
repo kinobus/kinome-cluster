@@ -8,8 +8,6 @@
 
 
 (function ($) {
-    // initialize cluster table to be invisible until data loaded
-    $("#clusterTable").css("visibility", "hidden");
 
     // radius slider
     $("input#radius").css("width", "100%")
