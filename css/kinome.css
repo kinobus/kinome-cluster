@@ -8,7 +8,24 @@ div.container {
 }
 
 div.span9 {
+    position: relative;
     width: 825px;
+}
+
+div#kinome-bg {
+    width: 825px;
+    height: 975px;
+    background-size: cover;
+    z-index: 1;
+    position: absolute;
+}
+
+#kinome {
+    z-index: 2;
+    position: absolute;
+    width: 825px;
+    height: 975px;
+    background-size: cover;
 }
 
 table#clusterTable thead tr th {
@@ -59,32 +76,6 @@ td.nameCell {
 #kinomeDiv {
     width: 825px;
 }
-
-#kinome {
-    width: 825px;
-    height: 975px;
-    background-size: cover;
-}
-
-/*
-.kinase {
-    stroke: black;
-    stroke-width: .4;
-    fill: white;
-    fill-opacity: .5;
-}
-
-.data#pts {
-    stroke: white;
-    stroke-width: 1px;
-    stroke-opacity: 0.5;
-}
-
-.data#label {
-    font-family: sans-serif;
-    fill: black;
-}
-*/
 
 #colorPickerTable td {
     padding-right: 8px;

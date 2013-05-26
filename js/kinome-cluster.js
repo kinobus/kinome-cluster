@@ -8,7 +8,6 @@
 
 
 (function ($) {
-
     // initialize cluster table to be invisible until data loaded
     $("#clusterTable").css("visibility", "hidden");
 
@@ -514,33 +513,36 @@
 
     KVM = new KinomeViewModel();
 
+    var kinomeBG;
+
+    // request background kinome
+    $.ajax({
+        url: 'img/kinome.svg',
+        dataType: 'text',
+        success: function(svgText) {
+            console.log('background svg loaded');
+            kinomeBG = svgText;
+        },
+        error: function(e) {
+            console.log('error retreiving kinome.svg');
+        }
+    });
+
     /* SVG download event
      * using FileSaver.js */
     $('#download').click(function() {
-        var that = $(this);
-        that.attr('disabled', 'disabled');
-        $.ajax({
-            url: 'img/kinome.svg',
-            dataType: 'text',
-            success: function(kinomeBG) {
-                var bg_grp = 
-                    /<[gG][^>]*>(.|[\r\n])*<\/[gG]>/.exec(kinomeBG)[0];
-                var overlay = $('#kinomeDiv').html();
-                var dl_svg = overlay.replace('<g id="replace"></g>',
-                                             bg_grp);
-                var svgBlob = new Blob([dl_svg], {
-                    type: 'image/svg+xml;'
-                });
-                saveAs(svgBlob, 'kinome.svg');
-                that.attr('disabled', false);
-            },
-            error: function(e) {
-                alert('Sorry, there was an error processing the SVG file. '
-                      + 'Please try again. If the problem persists, '
-                      + 'contact the developers.');
-                that.attr('disabled', false);
-            }
+        var dlButton = $(this);
+        dlButton.attr('disabled', 'disabled');
+        var bg_grp = 
+            /<[gG][^>]*>(.|[\r\n])*<\/[gG]>/.exec(kinomeBG)[0];
+        var overlay = $('#kinomeDiv').html();
+        var dl_svg = overlay.replace('<g id="replace"></g>',
+                                     bg_grp);
+        var svgBlob = new Blob([dl_svg], {
+            type: 'image/svg+xml;'
         });
+        saveAs(svgBlob, 'kinome.svg');
+        dlButton.attr('disabled', false);
     });
 
 }) (jQuery);
