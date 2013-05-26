@@ -545,6 +545,8 @@
     /* SVG download event
      * using FileSaver.js */
     $('#download').click(function() {
+        var that = $(this);
+        that.attr('disabled', 'disabled');
         $.ajax({
             url: 'img/kinome.svg',
             dataType: 'text',
@@ -558,6 +560,13 @@
                     type: 'image/svg+xml;'
                 });
                 saveAs(svgBlob, 'kinome.svg');
+                that.attr('disabled', false);
+            },
+            error: function(e) {
+                alert('Sorry, there was an error processing the SVG file. '
+                      + 'Please try again. If the problem persists, '
+                      + 'contact the developers.');
+                that.attr('disabled', false);
             }
         });
     });
