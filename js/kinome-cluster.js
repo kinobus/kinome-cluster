@@ -9,11 +9,6 @@
 
 (function ($) {
 
-    var render= {
-        url: 'http://ruby.cat.pdx.edu:5050/render'
-    };
-        
-
     // initialize cluster table to be invisible until data loaded
     $("#clusterTable").css("visibility", "hidden");
 
@@ -259,29 +254,6 @@
                          break;
             }
         }
-
-        // exporter
-        $('#export').click(function() {
-            $(this).attr('disabled', true);
-            var serializer = new XMLSerializer();
-            var kinome = document.getElementById('kinome');
-            var svgText = serializer.serializeToString(kinome);
-            // send plotted svg data to KinoRender server
-            var data = {
-                svg: svgText,
-                app: 'kinome-cluster'
-            };
-            $.ajax({
-                url: render.url,
-                data: data,
-                jsonp: 'jsonp',
-                success: function(data) {
-                    var img = '<img src="data:image/png;base64,' + data.png + '" />';
-                    $('body').html(img);
-                }
-            });
-        });
-
 
         // parse, plot user uploaded data
         // inputData should be sufficiently parsed
