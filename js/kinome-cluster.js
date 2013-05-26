@@ -458,7 +458,7 @@
                     return self.getColor(d.Cluster);
                 })
                 .style("fill-opacity", self.opac)
-                .style("stroke-width", 1)
+                .style("stroke-width", 1.5)
                 .style("stroke", "white")
                 .attr("cluster", function(d) {
                     return d.Cluster;
@@ -470,7 +470,7 @@
                 })
                 .style("fill", "black")
                 .style("font-family", "sans-serif")
-                .style("font-size", "10pt")
+                .style("font-size", "12pt")
                 // only set class/id to valid text labels (odd)
                 .attr("class", function(d, i) {
                     return i < self.userData.length ? "dummy" : "data";

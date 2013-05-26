@@ -92,6 +92,7 @@ td.nameCell {
 
 .label {
     cursor: move;
+    font-weight: normal;
 }
 
 #red, #green, #blue {
