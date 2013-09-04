@@ -71,11 +71,15 @@
     var opacityOptionView = new OptionView(opacityOptionModel, $('input#opac'));
 
     // clusters
+    var clusters;   // list of clusters
     var clustersOptionModel = new OptionModel({ name: 'clusters', value: 2 });
     var clustersOptionView = new OptionView(clustersOptionModel, $('input#K'));
+    clustersOptionModel.on('change', function() {
+        calculateClusters();
+        this.trigger('clustered');
+    });
 
 
-    var clusters;
 
     /* Experimental Values */
 
@@ -117,7 +121,8 @@
 
             this.listenTo(this.radius, 'change', this.render);
             this.listenTo(this.opacity, 'change', this.render);
-            this.listenTo(this.cluster, 'change', this.render);
+            this.listenTo(this.cluster, 'clustered', this.render);
+
             this.render();
         },
         render: function() {
