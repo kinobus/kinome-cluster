@@ -208,6 +208,7 @@
                     return 'end';
                 })
                 .attr('id', function(d) { return d.data.get('ptm'); })
+                .style('font-family', 'sans-serif')
                 .text(function(d) {
                     if (self.observations.length > 1) {
                         return d.data.get('ptm');
@@ -318,5 +319,37 @@
         }
     });
     var fileUpload = new FileUpload();
+
+    var kinomeBG;
+
+    // request background kinome
+    $.ajax({
+        url: 'img/kinome.svg',
+        dataType: 'text',
+        success: function(svgText) {
+            console.log('background svg loaded');
+            kinomeBG = svgText;
+            $('button#download').attr('disabled', false);
+        },
+        error: function(e) {
+            console.log('error retreiving kinome.svg');
+        }
+    });
+
+    /* SVG download event
+     * using FileSaver.js */
+    $('#download').click(function() {
+        var dlButton = $(this);
+        dlButton.attr('disabled', 'disabled');
+        var bg_grp = /<[gG][^>]*>(.|[\r\n])*<\/[gG]>/.exec(kinomeBG)[0];
+        var overlay = $('#kinomeDiv').html();
+        var dl_svg = overlay.replace('<g id="replace"></g>',
+                                     bg_grp);
+        var svgBlob = new Blob([dl_svg], {
+            type: 'image/svg+xml;'
+        });
+        saveAs(svgBlob, 'kinome.svg');
+        dlButton.attr('disabled', false);
+    });
 
 })(jQuery);
