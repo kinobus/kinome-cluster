@@ -22,7 +22,7 @@
             this.listenTo(this.collection, 'reset', this.render);
         },
         render: function() {
-            this.kinaseGrp = d3.select('svg#kinome g#kinase_grp')
+            this.kinaseGrp = d3.select('svg#kinome g#static')
                 .selectAll('circle')
                 .data(this.collection.models)
                 .enter()
@@ -63,11 +63,11 @@
     });
 
     // radius
-    var radiusOptionModel = new OptionModel({ name: 'radius', value: 40 });
+    var radiusOptionModel = new OptionModel({ name: 'radius', value: 20 });
     var radiusOptionView = new OptionView(radiusOptionModel, $('input#radius'));
 
     // opacity
-    var opacityOptionModel = new OptionModel({ name: 'opacity', value: 0.8 });
+    var opacityOptionModel = new OptionModel({ name: 'opacity', value: 0.6 });
     var opacityOptionView = new OptionView(opacityOptionModel, $('input#opac'));
 
     // clusters
@@ -114,7 +114,7 @@
             this.pie = d3.layout.pie()
                 .sort(null)
                 .value(function(d) { return 1; });
-            this.g = d3.select('#kinome')
+            this.g = d3.select('#kinome #plot')
                 .append('svg:g')
                 .attr('transform', 'translate(' + this.kinase.get('x') + ',' +
                       this.kinase.get('y') + ')');
@@ -156,7 +156,10 @@
                     return 'end';
                 })
                 .text(function(d) {
-                    return d.data.get('ptm');
+                    if (self.observations.length > 1) {
+                        return d.data.get('ptm');
+                    }
+                    return self.kinase.get('name');
                 });
         }
     });
