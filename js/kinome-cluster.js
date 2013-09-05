@@ -52,28 +52,32 @@
         initialize: function(option, elem) {
             this.model = option;
             this.$el = elem;
+            this.range = $('input[type=range]', this.$el)
+                .css('width', '100%');
+            this.label = $('label', this.$el).text(this.model.get('value'));
         },
         events: {
-            'change': 'update'
+            'change input[type=range]': 'update'
         },
         update: function() {
             console.log('update');
-            this.model.set('value', parseFloat(this.$el.val()));
+            this.model.set('value', parseFloat(this.range.val()));
+            this.label.text(this.model.get('value'));
         }
     });
 
     // radius
     var radiusOptionModel = new OptionModel({ name: 'radius', value: 20 });
-    var radiusOptionView = new OptionView(radiusOptionModel, $('input#radius'));
+    var radiusOptionView = new OptionView(radiusOptionModel, $('table#radiusRow'));
 
     // opacity
     var opacityOptionModel = new OptionModel({ name: 'opacity', value: 0.6 });
-    var opacityOptionView = new OptionView(opacityOptionModel, $('input#opac'));
+    var opacityOptionView = new OptionView(opacityOptionModel, $('table#opacityRow'));
 
     // clusters
     var clusters;   // list of clusters
     var clustersOptionModel = new OptionModel({ name: 'clusters', value: 2 });
-    var clustersOptionView = new OptionView(clustersOptionModel, $('input#K'));
+    var clustersOptionView = new OptionView(clustersOptionModel, $('table#clusterRow'));
     clustersOptionModel.on('change', function() {
         calculateClusters();
         this.trigger('clustered');
