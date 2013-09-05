@@ -276,9 +276,47 @@
         }
     });
 
-    /* Demo */
-    $('#demo').on('click', function() {
-        dataset.fetch({ reset: true });
+
+    var FileUpload = Backbone.View.extend({
+        initialize: function() {
+            this.$el = $('#csv_file');
+            this.demo = $('#demo');
+            this.demo.on('click', function() {
+                dataset.fetch({ reset: true });
+            });
+        },
+        events: {
+            change: 'upload'
+        },
+        upload: function(data) {
+            var self = this;
+            var files = this.$el[0].files;
+            this.data = [];
+            this.reader = new FileReader();
+            this.reader.onloadend = function(e) {
+                self.parseFile();
+            };
+            this.reader.readAsText(files[0]);
+        },
+        parseFile: function() {
+            var raw = String(this.reader.result);
+            raw = raw.replace(/\r/g, '');
+            var rows = d3.csv.parseRows(raw);
+            this.data = this.data.concat(rows.map(function(r) {
+                var newRow = [];
+                for (var i = 0; i < r.length; i++) {
+                    if (i !== 1) {
+                        newRow.push(Number(r[i]));
+                    }
+                    else {
+                        newRow.push(r[i]);
+                    }
+                }
+                return newRow;
+            }));
+            dataset.reset(dataset.parse(this.data));
+        }
     });
+    var fileUpload = new FileUpload();
 
 })(jQuery);
