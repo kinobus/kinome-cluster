@@ -79,6 +79,41 @@
         this.trigger('clustered');
     });
 
+    var ClusterTable = Backbone.View.extend({
+        initialize: function() {
+            this.$el = $('table#clusterTable');
+            this.tbody = $('tbody', this.$el);
+            this.model = clustersOptionModel;
+            this.dataset = dataset;
+            this.listenTo(this.model, 'clustered', this.render);
+            this.listenTo(this.dataset, 'clustered', this.render);
+        },
+        render: function() {
+            var row, color, mean;
+            this.tbody.empty();
+            if (typeof clusters !== 'undefined') {
+                for (var i = 0; i < this.model.get('value'); i++) {
+                    color = $('<div></div>')
+                        .css('width', '40px')
+                        .css('height', '20px')
+                        .css('display', 'inline-block')
+                        .css('background-color', colors(i));
+                    mean = $('<div></div>').attr('id', 'mean' + (i + 1));
+                    row = $('<tr></td>');
+                    row.append($('<td>' + (i + 1) + '</td>'));
+                    row.append($('<td></td>').append(color));
+                    row.append($('<td></td>').append(mean));
+                    this.tbody.append(row);
+                    $('#mean' + (i + 1)).sparkline(getMeanSeries(i), {
+                        type: 'line',
+                        width: '80px',
+                        fillColor: '#fff'
+                    });
+                }
+                this.$el.css('visibility', 'visible');
+            }
+        }
+    });
 
 
     /* Experimental Values */
@@ -100,6 +135,7 @@
     });
 
     var dataset = new Dataset();
+    clusterTable = new ClusterTable();
 
     var Plot = Backbone.View.extend({
         initialize: function(observations) {
@@ -130,6 +166,9 @@
             if (this.hasOwnProperty('el')) {
                 this.el.remove();
             }
+            if (this.hasOwnProperty('labelGrp')) {
+                this.labelGrp.remove();
+            }
             this.arc = d3.svg.arc()
                 .outerRadius(this.radius.get('value'))
                 .innerRadius(0);
@@ -141,13 +180,26 @@
             this.el.append('path')
                 .attr('d', this.arc)
                 .attr('fill-opacity', this.opacity.get('value'))
+                .style('stroke', '#fff')
+                .style('stroke-width', 1.5)
                 .style('fill', function(d) {
                     var intensity = d.data.get('intensity');
                     return colors(getCluster(intensity));
                 });
-            this.el.append('text')
+            this.labelGrp = d3.select('#kinome #label')
+                .append('svg:g')
+                .attr('transform', 'translate(' +
+                      this.kinase.get('x') + ',' +
+                      this.kinase.get('y') + ')');
+            this.label = this.labelGrp.selectAll('.lbl')
+                .data(self.pie(this.observations.models))
+                .enter()
+                .append('g')
+                .attr('class', 'lbl');
+            this.label.append('text')
                 .attr('transform', function(d) {
                     return 'translate(' + self.arc.centroid(d) + ')';
+                    //return 'translate(0, 0)';
                 })
                 .style('text-anchor', function(d, i) {
                     if (i < self.observations.length / 2) {
@@ -155,6 +207,7 @@
                     }
                     return 'end';
                 })
+                .attr('id', function(d) { return d.data.get('ptm'); })
                 .text(function(d) {
                     if (self.observations.length > 1) {
                         return d.data.get('ptm');
@@ -194,8 +247,27 @@
         return undefined;
     };
 
+    var getMeanSeries = function (clusterNum) {
+        var cluster = clusters[clusterNum];
+        var row, mean = [], sums = [];
+
+        for (var i = 0; i < cluster[0].length; i++) {
+            sums.push(0);
+        }
+
+        for (var i = 0; i < cluster.length; i++) {
+            row = cluster[i];
+            for (var j = 0; j < row.length; j++) {
+                sums[j] += row[j];
+            }
+        }
+
+        return sums.map(function(d) { return d / cluster.length; });
+    };
+
     dataset.on('reset', function(d) {
         calculateClusters();
+        this.trigger('clustered');
         var gidSet = _.uniq(this.pluck('geneid'));
         var data;
         for (var i = 0; i < gidSet.length; i++) {
@@ -208,6 +280,5 @@
     $('#demo').on('click', function() {
         dataset.fetch({ reset: true });
     });
-
 
 })(jQuery);
