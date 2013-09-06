@@ -2,6 +2,10 @@ body {
     padding-top: 20px;
 }
 
+row {
+    margin: 0 auto;
+}
+
 /* override container */
 .container-narrow {
     width: 825px;
@@ -101,6 +105,7 @@ td.nameCell {
 }
 
 #kinomeDiv {
+    height: 975px;
     width: 825px;
 }
 
@@ -120,19 +125,10 @@ td.nameCell {
     margin: 5px;
 }
 
-
-.swatch {
-    width: 40px;
-    height: 40px;
-    background-image: none;
-    padding: 5px;
-}
-
-#footer {
+.footer {
     font-family: sans-serif;
     font-size: 16;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px 0;
     text-align: left;
 }
 
