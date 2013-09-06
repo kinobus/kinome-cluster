@@ -20,9 +20,18 @@ a > label {
 }
 
 .masthead > h1 {
-    font-size: 52px;
+    font-size: 44px;
     font-style: italic;
     font-weight: 300;
+}
+
+.masthead > h1 > a {
+    text-decoration: none;
+}
+
+.modal {
+    width: 360px;
+    margin: -250px 0 0 -180px;
 }
 
 .modal-backdrop, .modal-backdrop.fade.in {
@@ -50,6 +59,7 @@ table#clusterTable thead tr th {
 }
 
 table.slideRow {
+    margin: 0 auto;
     width: 220px;
     table-layout: fixed;
 }

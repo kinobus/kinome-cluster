@@ -102,7 +102,7 @@
                         .css('height', '20px')
                         .css('display', 'inline-block')
                         .css('background-color', colors(i));
-                    mean = $('<div></div>').attr('id', 'mean' + (i + 1));
+                    mean = $('<div>&nbsp;</div>').attr('id', 'mean' + (i + 1));
                     row = $('<tr></td>');
                     row.append($('<td>' + (i + 1) + '</td>'));
                     row.append($('<td></td>').append(color));
@@ -110,10 +110,11 @@
                     this.tbody.append(row);
                     $('#mean' + (i + 1)).sparkline(getMeanSeries(i), {
                         type: 'line',
-                        width: '80px',
+                        width: '120px',
                         fillColor: '#fff'
                     });
                 }
+                $('#clusterHeader').css('display', 'block');
                 this.$el.css('visibility', 'visible');
             }
         }
@@ -360,7 +361,11 @@
 
     // Controls
     $('a#settings').on('click', function() {
-        $('.modal').modal();
+        $('.modal').modal()
+            .on('shown', function() {
+                console.log('shown');
+                $.sparkline_display_visible();
+            });
     });
 
 })(jQuery);

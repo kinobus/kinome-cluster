@@ -11,7 +11,7 @@
     <link rel="icon" type="image/ico" href="kinome-overlay.ico" />
 
     <!-- Necessary JS Libraries -->
-    <script src="js/lib/jquery-1.7.2.js"></script>
+    <script src="js/lib/jquery-1.10.2.js"></script>
     <script src="js/lib/underscore.js"></script>
     <script src="js/lib/backbone.js"></script>
     <script src="js/lib/d3.v3.js"></script>
@@ -44,6 +44,9 @@
             </li>
             <li>
                 <a href="javascript:void(0);" id="demo">Demo</a>
+            </li>
+            <li>
+                <a href="https://github.com/kinobus/kinome-cluster/wiki">Wiki</a>
             </li>
         </ul>
         <h1>
@@ -78,60 +81,64 @@
 
 <!-- Controls -->
 <div class="modal hide fade">
-    <ul class="nav nav-list">
-
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">&times;</button>
+        <h3>Display Settings</h3>
+    </div>
+    <div class="modal-body">
         <!-- Scaling -->
-        <li class="nav-header">Scaling</li>
-            <table class="slideRow" id="radiusRow">
-                <tr>
-                    <td class="nameCell">Radius</td>
-                    <td class="slideCell">
-                        <input type="range" id="radius" min="0" max="40" value="20" step="5">
-                    </td>
-                    <td class="labelCell"><label id="radius"></label></td>
-                </tr>
-            </table>
+        <table class="slideRow" id="radiusRow">
+            <tr>
+                <td class="nameCell">Radius</td>
+                <td class="slideCell">
+                    <input type="range" id="radius" min="0" max="40" value="20" step="5">
+                </td>
+                <td class="labelCell"><label id="radius"></label></td>
+            </tr>
+        </table>
 
-        <!-- Color Picker -->
-        <li class="nav-header">Display</li>
-            <!-- opacity -->
-            <table class="slideRow" id="opacityRow">
-                <tr>
-                    <td class="nameCell">
-                        Opacity
-                    </td>
-                    <td class="slideCell">
-                        <input type="range" id="opac" min="0" max="1" step="0.1" value="0.6">
-                    </td>
-                    <td class="labelCell">
-                        <label id="opac"></label>
-                    </td>
-                </tr>
-            </table>
-
+        <!-- opacity -->
+        <table class="slideRow" id="opacityRow">
+            <tr>
+                <td class="nameCell">
+                    Opacity
+                </td>
+                <td class="slideCell">
+                    <input type="range" id="opac" min="0" max="1" step="0.1"
+                        value="0.6">
+                </td>
+                <td class="labelCell">
+                    <label id="opac"></label>
+                </td>
+            </tr>
+        </table>
 
         <!-- Clustering -->
-        <li class="nav-header">Clustering</li>
-            <div id="clustering">
-                <table class="slideRow" id="clusterRow">
-                    <tr>
-                        <td class="nameCell">Clusters</td>
-                        <td class="slideCell"><input type="range" id="K" min="2" max="10" step="1" value="2"></td>
-                        <td class="labelCell"><label id="K"></label></td>
-                    </tr>
-                </table>
-                <table id="clusterTable"
-                    class="table table-condensed"
-                    style="visibility: hidden;">
-                    <thead>
-                        <th>#</th>
-                        <th>Color</th>
-                        <th>Mean</th>
-                    </thead>
-                    <tbody id="clusterTableBody">
-                    </tbody>
-                </table>
-            </div><!-- end clustering -->
+        <div id="clustering">
+            <table class="slideRow" id="clusterRow">
+                <tr>
+                    <td class="nameCell">Clusters</td>
+                    <td class="slideCell">
+                        <input type="range" id="K" min="2" max="10" step="1"
+                            value="2">
+                    </td>
+                    <td class="labelCell"><label id="K"></label></td>
+                </tr>
+            </table>
+            <h3 id="clusterHeader" style="display: none;">Clusters</h3>
+            <table id="clusterTable"
+                class="table table-condensed"
+                style="visibility: hidden;">
+                <thead>
+                    <th>#</th>
+                    <th>Color</th>
+                    <th>Mean</th>
+                </thead>
+                <tbody id="clusterTableBody">
+                </tbody>
+            </table>
+        </div><!-- end clustering -->
 
     </ul>
 
