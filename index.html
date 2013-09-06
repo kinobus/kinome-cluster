@@ -23,134 +23,119 @@
 </head>
 
 <body>
+<div class="container-narrow">
 
-<!-- Navbar (tbs) -->
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container" style="width: 1065px">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </a>
-        <a class="brand" href="javascript:void(0)" style="margin-left: -20px">Kinome Cluster</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <li><a href="http://github.com/kinobus/kinome-cluster">About</a></li>
-                    <li><a href="mailto:josephl@cecs.pdx.edu,nrobin24@uw.edu">Contact</a></li>
-                    <li><a href="javascript:void(0)" id="demo">Demo</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
+    <!-- header -->
+    <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+            <li>
+                <a href="javascript:void(0);">
+                    <label id="uploadLabel">Upload
+                        <input type="file" id="csv_file" accept="text/csv"
+                            name="files"/>
+                    </label>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" id="settings">Display Settings</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" id="download">Download</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" id="demo">Demo</a>
+            </li>
+        </ul>
+        <h1>
+            <a href="/">Kinome Cluster</a>
+            <a href="http://github.com/kinobus/kinome-cluster">
+                <img src="img/GitHub-Mark-32px.png"/>
+            </a>
+        </h1>
+    </div>
+    <!-- end header -->
+
+
+    <!-- Kinome -->
+    <div id="kinome-bg" style="background-image: url(img/kinome.png);"></div>
+    <div id="kinomeDiv">
+        <svg id="kinome"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="1.1" width="825" height="975">
+            <!-- replacement placeholder for svg download -->
+            <g id="replace"></g>
+            <g id="static"></g>
+            <g id="plot"></g>
+            <g id="label"></g>
+        </svg>
     </div>
 </div>
-<!-- end navbar -->
 
-<div class="container" id="control">
-    <div class="row">
+<!-- Controls -->
+<div class="modal hide fade">
+    <ul class="nav nav-list">
 
-        <!-- Sidebar -->
-        <div class="span3">
-            <ul class="nav nav-list">
+        <!-- Scaling -->
+        <li class="nav-header">Scaling</li>
+            <table class="slideRow" id="radiusRow">
+                <tr>
+                    <td class="nameCell">Radius</td>
+                    <td class="slideCell">
+                        <input type="range" id="radius" min="0" max="40" value="20" step="5">
+                    </td>
+                    <td class="labelCell"><label id="radius"></label></td>
+                </tr>
+            </table>
 
-                <!-- Upload Tab -->
-                <li class="nav-header">Upload Data</li>
-                    <div id="upload">
-                        <input id="csv_file" type="file" accept="text/csv" name="files[]" multiple></input>
-                    </div><!-- end upload -->
-
-                <!-- Scaling -->
-                <li class="nav-header">Scaling</li>
-                    <table class="slideRow" id="radiusRow">
-                        <tr>
-                            <td class="nameCell">Radius</td>
-                            <td class="slideCell">
-                                <input type="range" id="radius" min="0" max="40" value="20" step="5">
-                            </td>
-                            <td class="labelCell"><label id="radius"></label></td>
-                        </tr>
-                    </table>
-
-                <!-- Color Picker -->
-                <li class="nav-header">Display</li>
-                    <!-- opacity -->
-                    <table class="slideRow" id="opacityRow">
-                        <tr>
-                            <td class="nameCell">
-                                Opacity
-                            </td>
-                            <td class="slideCell">
-                                <input type="range" id="opac" min="0" max="1" step="0.1" value="0.6">
-                            </td>
-                            <td class="labelCell">
-                                <label id="opac"></label>
-                            </td>
-                        </tr>
-                    </table>
+        <!-- Color Picker -->
+        <li class="nav-header">Display</li>
+            <!-- opacity -->
+            <table class="slideRow" id="opacityRow">
+                <tr>
+                    <td class="nameCell">
+                        Opacity
+                    </td>
+                    <td class="slideCell">
+                        <input type="range" id="opac" min="0" max="1" step="0.1" value="0.6">
+                    </td>
+                    <td class="labelCell">
+                        <label id="opac"></label>
+                    </td>
+                </tr>
+            </table>
 
 
-                <!-- Clustering -->
-                <li class="nav-header">Clustering</li>
-                    <div id="clustering">
-                        <table class="slideRow" id="clusterRow">
-                            <tr>
-                                <td class="nameCell">Clusters</td>
-                                <td class="slideCell"><input type="range" id="K" min="2" max="10" step="1" value="2"></td>
-                                <td class="labelCell"><label id="K"></label></td>
-                            </tr>
-                        </table>
-                        <table id="clusterTable"
-                            class="table table-condensed"
-                            style="visibility: hidden;">
-                            <thead>
-                                <th>#</th>
-                                <th>Color</th>
-                                <th>Mean</th>
-                            </thead>
-                            <tbody id="clusterTableBody">
-                            </tbody>
-                        </table>
-                    </div><!-- end clustering -->
+        <!-- Clustering -->
+        <li class="nav-header">Clustering</li>
+            <div id="clustering">
+                <table class="slideRow" id="clusterRow">
+                    <tr>
+                        <td class="nameCell">Clusters</td>
+                        <td class="slideCell"><input type="range" id="K" min="2" max="10" step="1" value="2"></td>
+                        <td class="labelCell"><label id="K"></label></td>
+                    </tr>
+                </table>
+                <table id="clusterTable"
+                    class="table table-condensed"
+                    style="visibility: hidden;">
+                    <thead>
+                        <th>#</th>
+                        <th>Color</th>
+                        <th>Mean</th>
+                    </thead>
+                    <tbody id="clusterTableBody">
+                    </tbody>
+                </table>
+            </div><!-- end clustering -->
 
-                <!-- Download -->
-                <li class="nav-header">Download</li>
-                    <div class="exportDiv">
-                        <button id="download"
-                            disabled="disabled">Download SVG</button><br>
-                    </div>
-            </ul>
+    </ul>
 
-        </div><!-- end span -->
-
-        <!-- Kinome -->
-        <div class="span9" style="margin-left: 0px">
-            <div id="kinome-bg" style="background-image: url(img/kinome.png);"></div>
-            <div id="kinomeDiv">
-                <svg id="kinome"
-                    xmlns:dc="http://purl.org/dc/elements/1.1/"
-                    xmlns:cc="http://creativecommons.org/ns#"
-                    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                    xmlns:svg="http://www.w3.org/2000/svg"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    version="1.1" width="825" height="975">
-                    <!-- replacement placeholder for svg download -->
-                    <g id="replace"></g>
-                    <g id="static"></g>
-                    <g id="plot"></g>
-                    <g id="label"></g>
-                </svg>
-            </div>
-        </div><!-- end span/Kinome -->
-
-    </div><!-- end row -->
-
-    <div id="footer" class="row">
-        <div class="span9">
-            Copyright 2012 &copy; Joseph Lee, Nick Robin
-        </div>
-    </div>
-</div>
+</div><!-- end span -->
 
     <script src="js/kinome-cluster.js"></script>
 

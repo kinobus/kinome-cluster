@@ -333,7 +333,7 @@
         success: function(svgText) {
             console.log('background svg loaded');
             kinomeBG = svgText;
-            $('button#download').attr('disabled', false);
+            $('#download').attr('disabled', false);
         },
         error: function(e) {
             console.log('error retreiving kinome.svg');
@@ -344,16 +344,23 @@
      * using FileSaver.js */
     $('#download').click(function() {
         var dlButton = $(this);
-        dlButton.attr('disabled', 'disabled');
-        var bg_grp = /<[gG][^>]*>(.|[\r\n])*<\/[gG]>/.exec(kinomeBG)[0];
-        var overlay = $('#kinomeDiv').html();
-        var dl_svg = overlay.replace('<g id="replace"></g>',
-                                     bg_grp);
-        var svgBlob = new Blob([dl_svg], {
-            type: 'image/svg+xml;'
-        });
-        saveAs(svgBlob, 'kinome.svg');
-        dlButton.attr('disabled', false);
+        if (typeof dlButton.attr('disabled') === 'undefined') {
+            dlButton.attr('disabled', 'disabled');
+            var bg_grp = /<[gG][^>]*>(.|[\r\n])*<\/[gG]>/.exec(kinomeBG)[0];
+            var overlay = $('#kinomeDiv').html();
+            var dl_svg = overlay.replace('<g id="replace"></g>',
+                                         bg_grp);
+            var svgBlob = new Blob([dl_svg], {
+                type: 'image/svg+xml;'
+            });
+            saveAs(svgBlob, 'kinome.svg');
+            dlButton.attr('disabled', false);
+        }
+    });
+
+    // Controls
+    $('a#settings').on('click', function() {
+        $('.modal').modal();
     });
 
 })(jQuery);
