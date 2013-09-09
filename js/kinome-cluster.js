@@ -358,6 +358,36 @@
             dlButton.attr('disabled', false);
         }
     });
+    /* XML download */
+    $('#downloadXML').click(function() {
+        var sampleData = dataset.toJSON();
+        sampleData.forEach(function(d) {
+            d['@id'] = d.geneid.toString() + d.ptm;
+            d.cluster = getCluster(d.intensity);
+        });
+        var clusterData = new Array;
+        for (c in clusters) {
+            clusterData.push({
+                '@id': c,
+                meanValue: getMeanSeries(c),
+                displayColor: colors(c),
+            });
+        }
+        var xml = '<?xml version="1.0"?>\n' + json2xml({
+            data: {
+                samples: {
+                    sample: sampleData
+                },
+                clusters: {
+                    cluster: clusterData
+                }
+            }
+        });
+        var xmlBlob = new Blob([xml], {
+            type: 'text/xml;'
+        });
+        saveAs(xmlBlob, 'cluster.xml');
+    });
 
     // Controls
     $('a#settings').on('click', function() {
