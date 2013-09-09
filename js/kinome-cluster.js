@@ -133,7 +133,7 @@
                 return {
                     geneid: d[0],
                     ptm: d[1],
-                    intensity: d.slice(2)
+                    inputValue: d.slice(2)
                 };
             });
         }
@@ -188,8 +188,8 @@
                 .style('stroke', '#fff')
                 .style('stroke-width', 1.5)
                 .style('fill', function(d) {
-                    var intensity = d.data.get('intensity');
-                    return colors(getCluster(intensity));
+                    var inputValue = d.data.get('inputValue');
+                    return colors(getCluster(inputValue));
                 });
             this.labelGrp = d3.select('#kinome #label')
                 .append('svg:g')
@@ -228,12 +228,12 @@
 
     // calculate clusters
     var calculateClusters = function() {
-        clusters = clusterfck.kmeans(dataset.pluck('intensity'),
+        clusters = clusterfck.kmeans(dataset.pluck('inputValue'),
                                      clustersOptionModel.get('value'));
     };
     
     // get cluster number
-    var getCluster = function (intensity) {
+    var getCluster = function (inputValue) {
         var cluster, row, match;
         for (var i = 0; i < clusters.length; i++) {
             cluster = clusters[i];
@@ -241,7 +241,7 @@
                 row = cluster[j];
                 match = true;
                 for (var k = 0; k < row.length && match === true; k++) {
-                    if (intensity[k] != row[k]) {
+                    if (inputValue[k] != row[k]) {
                         match = false;
                     }
                 }
@@ -363,7 +363,7 @@
         var sampleData = dataset.toJSON();
         sampleData.forEach(function(d) {
             d['@id'] = d.geneid.toString() + d.ptm;
-            d.cluster = getCluster(d.intensity);
+            d.cluster = getCluster(d.inputValue);
         });
         var clusterData = new Array;
         for (c in clusters) {
