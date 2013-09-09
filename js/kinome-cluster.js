@@ -334,7 +334,7 @@
         success: function(svgText) {
             console.log('background svg loaded');
             kinomeBG = svgText;
-            $('#download').attr('disabled', false);
+            $('#downloadSVG').attr('disabled', false);
         },
         error: function(e) {
             console.log('error retreiving kinome.svg');
@@ -343,7 +343,7 @@
 
     /* SVG download event
      * using FileSaver.js */
-    $('#download').click(function() {
+    $('#downloadSVG').click(function() {
         var dlButton = $(this);
         if (typeof dlButton.attr('disabled') === 'undefined') {
             dlButton.attr('disabled', 'disabled');
