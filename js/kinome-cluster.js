@@ -9,6 +9,17 @@
 
 (function ($) {
     var colors = d3.scale.category10();
+    var drag = d3.behavior.drag()
+        .on('drag', function(d, i) {
+            var selection = d3.select(this);
+            selection.attr('transform', function(dt, it) {
+                if (typeof dt.x == 'undefined') { dt.x = d3.event.dx; }
+                else { dt.x += d3.event.dx; }
+                if (typeof dt.y == 'undefined') { dt.y = d3.event.dy; }
+                else { dt.y += d3.event.dy; }
+                return 'translate(' + dt.x + ', ' + dt.y + ')';
+            });
+        });
 
     /* Static kinase definitions */
 
@@ -200,7 +211,8 @@
                 .data(self.pie(this.observations.models))
                 .enter()
                 .append('g')
-                .attr('class', 'lbl');
+                .attr('class', 'lbl')
+                .call(drag);
             this.label.append('text')
                 .attr('transform', function(d) {
                     return 'translate(' + self.arc.centroid(d) + ')';
@@ -212,6 +224,7 @@
                     }
                     return 'end';
                 })
+                .attr('class', 'labelText')
                 .attr('id', function(d) { return d.data.get('ptm'); })
                 .style('font-family', 'sans-serif')
                 .text(function(d) {
