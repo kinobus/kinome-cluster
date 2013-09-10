@@ -62,6 +62,9 @@
             <li>
                 <a href="https://github.com/kinobus/kinome-cluster/wiki">Wiki</a>
             </li>
+            <li>
+                <a href="javascript:void(0);" id="clustersPill">Clusters</a>
+            </li>
         </ul>
         <h1>
             <a href="/">Kinome Cluster</a>
@@ -102,7 +105,7 @@
 </div>
 
 <!-- Controls -->
-<div class="modal hide fade">
+<div class="modal hide fade" id="displaySettings">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"
             aria-hidden="true">&times;</button>
@@ -136,36 +139,47 @@
             </tr>
         </table>
 
-        <!-- Clustering -->
-        <div id="clustering">
-            <table class="slideRow" id="clusterRow">
-                <tr>
-                    <td class="nameCell">Clusters</td>
-                    <td class="slideCell">
-                        <input type="range" id="K" min="2" max="10" step="1"
-                            value="2">
-                    </td>
-                    <td class="labelCell"><label id="K"></label></td>
-                </tr>
-            </table>
-            <h3 id="clusterHeader" style="display: none;">Clusters</h3>
-            <table id="clusterTable"
-                class="table table-condensed"
-                style="visibility: hidden;">
-                <thead>
-                    <th>#</th>
-                    <th>Color</th>
-                    <th>Mean</th>
-                </thead>
-                <tbody id="clusterTableBody">
-                </tbody>
-            </table>
-        </div><!-- end clustering -->
-
     </div>
 
 
 </div><!-- end span -->
+
+<!-- Cluster modal -->
+<div class="modal hide fade" id="clusterModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">&times;</button>
+        <h3>
+            Clusters
+        </h3>
+    </div>
+    <div class="modal-body">
+        <table class="slideRow" id="clusterRow">
+            <tr>
+                <td class="nameCell">Clusters</td>
+                <td class="slideCell">
+                    <input type="range" id="K" min="2" max="10" step="1"
+                        value="2">
+                </td>
+                <td class="labelCell"><label id="K"></label></td>
+            </tr>
+        </table>
+        <!--
+        <h3 id="clusterHeader" style="display: none;">Clusters</h3>
+        -->
+        <table id="clusterTable"
+            class="table table-condensed"
+            style="visibility: hidden;">
+            <thead>
+                <th>#</th>
+                <th>Color</th>
+                <th>Mean</th>
+            </thead>
+            <tbody id="clusterTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>
 
     <script src="js/kinome-cluster.js"></script>
 

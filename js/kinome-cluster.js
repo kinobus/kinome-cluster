@@ -125,7 +125,7 @@
                         fillColor: '#fff'
                     });
                 }
-                $('#clusterHeader').css('display', 'block');
+                //$('#clusterHeader').css('display', 'block');
                 this.$el.css('visibility', 'visible');
             }
         }
@@ -302,6 +302,7 @@
             this.demo = $('#demo');
             this.demo.on('click', function() {
                 dataset.fetch({ reset: true });
+                $('#clusterModal').modal('show');
             });
         },
         events: {
@@ -334,6 +335,7 @@
                 return newRow;
             }));
             dataset.reset(dataset.parse(this.data));
+            $('#clusterModal').modal('show');
         }
     });
     var fileUpload = new FileUpload();
@@ -404,11 +406,22 @@
 
     // Controls
     $('a#settings').on('click', function() {
-        $('.modal').modal()
+        $('#displaySettings.modal').modal()
             .on('shown', function() {
-                console.log('shown');
                 $.sparkline_display_visible();
             });
     });
+
+    $('#clusterModal').modal({
+        backdrop: false,
+        keyboard: false,
+        show: false
+    }).on('shown', function() {
+        $.sparkline_display_visible();
+    });
+    $('#clustersPill').on('click', function() {
+        $('#clusterModal').modal('toggle');
+    });
+    $('#clusterModal').draggable({ handle: '.modal-header' });
 
 })(jQuery);
